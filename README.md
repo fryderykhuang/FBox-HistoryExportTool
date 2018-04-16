@@ -45,7 +45,7 @@ For the date and time format string used above please refer to:
   * 用--begin-time, --end-time 指定具体时间范围。
   * 用--date指定某一天整天
   * 用--yesterday指定昨天一整天
-  * 用--export-last-segment指定导出上一个时间段的数据。需要用--segments-per-day指定要将一天等分成多少个时间段。举例：--segments-per-day 4 表示将一天划分成00:00~06:00,6:00:~12:00,12:00~18:00,18:00~24:00 4个等分区间。如果当前时间是7:25，那么运行了此工具后会导出00:00~6:00的数据（因为7:25所在区间是6:00~12:00，它的上一个区间是00:00~6:00），如果当前时间是5:30,那么会导出昨天18:00~24:00的内容。
+  * 用--export-last-segment指定导出上一个时间段的数据。需要用--segments-per-day指定要将一天等分成多少个时间段。举例：--segments-per-day 4 表示将一天划分成`00:00~06:00,6:00:~12:00,12:00~18:00,18:00~24:00` 4个等分区间。如果当前时间是7:25，那么运行了此工具后会导出`00:00~6:00`的数据（因为7:25所在区间是`6:00~12:00`，它的上一个区间是`00:00~6:00`），如果当前时间是5:30,那么会导出昨天`18:00~24:00`的内容。
 * 导出文件存放的目录 --output-dir （支持替换变量:{CurrentTime} {BeginTime} {EndTime} {BoxSN} {ItemName}）
 * 导出文件名格式 --output-file-name-pattern（支持替换变量:{CurrentTime} {BeginTime} {EndTime} {BoxSN} {ItemName}）
 * appsettings.json中的服务器地址，和开发者账号信息
@@ -60,7 +60,7 @@ For the date and time format string used above please refer to:
 2. 用管理员权限运行install-task.cmd
 
 ### 实际场景举例（Windows）
-比如需要每天导出4个文件（00:00~6:00, 6:00~12:00, 12:00~18:00, 18:00~24:00）那么：
+比如需要每天导出4个文件（`00:00~6:00, 6:00~12:00, 12:00~18:00, 18:00~24:00`）那么：
 1. install-task.cmd中修改创建计划任务的命令为：
 ~~~~
 schtasks /create /tn FBox_HistoryExport /sc hourly /mo 6 /st 00:30 /tr "%cd%\run-task.cmd" /ru SYSTEM  /f

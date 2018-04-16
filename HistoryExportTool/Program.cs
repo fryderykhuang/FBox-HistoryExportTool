@@ -59,14 +59,14 @@ For the date and time format string used above please refer to:
   https://docs.microsoft.com/en-us/dotnet/standard/base-types/standard-date-and-time-format-strings
 ";
                 var beginTimeArg = command.Option("--begin-time", "Specify the beginning of export time range.",CommandOptionType.SingleValue);
-                var endTimeArg = command.Option("--end-time", "Specify the beginning of export time range.", CommandOptionType.SingleValue);
-                var dateArg = command.Option("--date", "Specify the date of the whole day to export.", CommandOptionType.SingleValue);
-                var yesterdayArg = command.Option("--yesterday", "Set the time range as the whole day of yesterday.", CommandOptionType.NoValue);
+                var endTimeArg = command.Option("--end-time", "Specify the ending of export time range.", CommandOptionType.SingleValue);
+                var dateArg = command.Option("--date", "Specify a certain day to export.", CommandOptionType.SingleValue);
+                var yesterdayArg = command.Option("--yesterday", "Export data in yesterday.", CommandOptionType.NoValue);
                 var outputFileNamePatternArg = command.Option("--output-file-name-pattern",
-                    "Output file name pattern. Available substitution is {CurrentTime} {SegmentBeginTime} {SegmentEndTime} {BoxSN} {ItemName}.",
+                    "Output file name pattern. Available substitution is {CurrentTime} {BeginTime} {EndTime} {BoxSN} {ItemName}.",
                     CommandOptionType.SingleValue);
                 var outDirArg = command.Option("--output-dir",
-                    "The directory exported files are stored in. Available substitution is {CurrentTime} {SegmentBeginTime} {SegmentEndTime} {BoxSN} {ItemName}.",
+                    "The directory exported files are stored in. Available substitution is {CurrentTime} {BeginTime} {EndTime} {BoxSN} {ItemName}.",
                     CommandOptionType.SingleValue);
                 var timestampFormatArg = command.Option("--timestamp-format", "Timestamp format.",
                     CommandOptionType.SingleValue);

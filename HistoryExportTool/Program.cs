@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TimeZoneConverter;
 
 namespace HistoryExportTool
 {
@@ -72,7 +73,9 @@ For the date and time format string used above please refer to:
                     CommandOptionType.SingleValue);
 //                var boxNoArg = command.Option("--box-sn", "Box serial number", CommandOptionType.SingleValue);
                 var utcArg = command.Option("--utc", "Indicate the input time is specified as UTC time.", CommandOptionType.NoValue);
-                var boxSnFileArg = command.Option("--box-sn-file", "A file holds a list of box serial numbers.", CommandOptionType.SingleValue);
+                var outputTimeZoneArg = command.Option("--output-tz", "Specify the time zone of output timestamp. Can be Windows or IANA time zone ID. Default is local.",
+                    CommandOptionType.SingleValue);
+                var boxSnFileArg = command.Option("--box-sn-file", "A file holds a list of FBox serial numbers.", CommandOptionType.SingleValue);
                 var segmentsPerDayArg = command.Option("--segments-per-day",
                     "The number of equal parts a day will be divided into. Use with --export-last-segment", CommandOptionType.SingleValue);
                 var exportLastSegmentArg = command.Option("--export-last-segment", "Export last time segment, must be also specify --segments-per-day",
@@ -92,6 +95,10 @@ For the date and time format string used above please refer to:
                     {
                         dtStyle = DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal;
                     }
+
+                    var outputTz = outputTimeZoneArg.HasValue()
+                        ? TZConvert.GetTimeZoneInfo(outputTimeZoneArg.Value())
+                        : TimeZoneInfo.Local;
 
                     if (beginTimeArg.HasValue())
                     {
@@ -148,17 +155,17 @@ For the date and time format string used above please refer to:
                             throw new CommandParsingException(command, "24 must be divisible by --segments-per-day.");
 
                         var period = 24 / nsegs;
-                        var lastseg = localNow.Hour / period;
+                        var currentseg = localNow.Hour / period;
                         var nowdate = localNow.Date;
-                        if (lastseg == 0)
+                        if (currentseg == 0)
                         {
                             beginTime = nowdate.AddHours(-period);
                             endTime = nowdate;
                         }
                         else
                         {
-                            beginTime = nowdate.AddHours(lastseg * period);
-                            endTime = nowdate.AddHours((lastseg + 1) * period);
+                            beginTime = nowdate.AddHours((currentseg - 1) * period);
+                            endTime = nowdate.AddHours(currentseg * period);
                         }
 
                         beginTime = beginTime.ToUniversalTime();
@@ -275,10 +282,12 @@ For the date and time format string used above please refer to:
 
                                             IObservable<HdataDataRecord> result = fbox.GetHdataRecords(
                                                 hdataItem.Channels.Select(x => x.Uid).ToArray(), beginTime,
-                                                endTime, TimeRangeTypes.BeginCloseEndOpen);
+                                                endTime, TimeRangeTypes.BeginCloseEndOpen, outputTz.Id);
                                             result.Subscribe(o =>
                                             {
-                                                csv.WriteField(o.Timestamp.ToString(timestampFormat));
+                                                csv.WriteField(TimeZoneInfo
+                                                    .ConvertTime(o.Timestamp, TimeZoneInfo.Utc, outputTz)
+                                                    .ToString(timestampFormat));
 
                                                 foreach (var c in o.Cells)
                                                 {

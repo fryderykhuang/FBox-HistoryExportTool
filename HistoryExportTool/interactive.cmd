@@ -37,23 +37,24 @@ call :ReadCfg
 
 :MAIN_MENU
 cls
-echo ¨X¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨[
-echo ¨U                                            ¨U
-echo ¨U           FBoxÀúÊ·Êý¾Ýµ¼³ö¹¤¾ß             ¨U
-echo ¨U                                            ¨U
-echo ¨d¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨g
-echo ¨U                                            ¨U
-echo ¨U        1.  °²×°/¸üÐÂ¼Æ»®ÈÎÎñ               ¨U
-echo ¨U                                            ¨U
-echo ¨U        2.  ÊÖ¹¤µ¼³öÊý¾Ý                    ¨U
-echo ¨U                                            ¨U
-echo ¨U        3.  ÐÞ¸Äµ¼³ö²ÎÊý                    ¨U
-echo ¨U                                            ¨U
-echo ¨U        4.  É¾³ý¼Æ»®ÈÎÎñ                    ¨U
-echo ¨U                                            ¨U
-echo ¨U        0.  ÍË³ö                            ¨U
-echo ¨U                                            ¨U
-echo ¨^¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨a
+echo.
+echo.
+echo               FBoxÀúÊ·Êý¾Ýµ¼³ö¹¤¾ß
+echo.
+echo  ------------------------------------------------
+echo.
+echo          1.  °²×°/¸üÐÂ¼Æ»®ÈÎÎñ
+echo.
+echo          2.  ÊÖ¹¤µ¼³öÊý¾Ý
+echo.
+echo          3.  ÐÞ¸Äµ¼³ö²ÎÊý
+echo.
+echo          4.  É¾³ý¼Æ»®ÈÎÎñ
+echo.
+echo          0.  ÍË³ö
+echo.
+echo  ------------------------------------------------
+echo.
 set "choice="
 set /p choice=ÇëÑ¡Ôñ:
 if /i "%choice%" equ "0" goto END
@@ -122,25 +123,25 @@ exit /b
 :UPDATE_CFG
 call :ReadCfg
 cls
-echo ¨X¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨[
-echo ¨U                                            ¨U
-echo ¨U           FBoxÀúÊ·Êý¾Ýµ¼³ö¹¤¾ß             ¨U
-echo ¨U                                            ¨U
-echo ¨d¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨g
-echo ¨U                                            ¨U
-echo ¨U        1.  FBoxÁÐ±íÎÄ¼þÂ·¾¶                ¨U
-echo ¨U                                            ¨U
-echo ¨U        2.  Êä³öÎÄ¼þÃû¸ñÊ½                  ¨U
-echo ¨U                                            ¨U
-echo ¨U        3.  Êä³öÄ¿Â¼                        ¨U
-echo ¨U                                            ¨U
-echo ¨U        4.  Êä³öÄÚÈÝÊ±¼ä´Á¸ñÊ½              ¨U
-echo ¨U                                            ¨U
-echo ¨U        5.  ÖµÎª¿ÕÊ±µÄÌæ´úÎÄ±¾              ¨U
-echo ¨U                                            ¨U
-echo ¨U        0.  ·µ»Ø                            ¨U
-echo ¨U                                            ¨U
-echo ¨^¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨T¨a
+echo.
+echo.
+echo               FBoxÀúÊ·Êý¾Ýµ¼³ö¹¤¾ß
+echo.
+echo  ------------------------------------------------
+echo.
+echo          1.  FBoxÁÐ±íÎÄ¼þÂ·¾¶
+echo.
+echo          2.  Êä³öÎÄ¼þÃû¸ñÊ½
+echo.
+echo          3.  Êä³öÄ¿Â¼
+echo.
+echo          4.  Êä³öÄÚÈÝÊ±¼ä´Á¸ñÊ½
+echo.
+echo          5.  ÖµÎª¿ÕÊ±µÄÌæ´úÎÄ±¾
+echo.
+echo          0.  ·µ»Ø
+echo.
+echo  ------------------------------------------------
 echo.
 set "choice="
 set /p choice=ÇëÑ¡Ôñ:
@@ -202,7 +203,7 @@ if /i "%vi_nrSegments%" equ "24" goto :INSTALL_TASK_DO_INSTALL
 goto :INSTALL_TASK_INPUT_NR_SEGMENTS
 
 :INSTALL_TASK_DO_INSTALL:
-
+set "choice="
 set /p choice=È·ÈÏ¸üÐÂ¼Æ»®ÈÎÎñ£¿(y/n)
 if not "%choice%"=="y" (echo ÒÑÈ¡Ïû& call :Sleep 1& goto MAIN_MENU)
 echo cd /d %%~dp0> run-task.cmd
@@ -217,8 +218,12 @@ if /i "%errorlevel%" equ "0" (echo ¼Æ»®ÈÎÎñ¸üÐÂ³É¹¦& call :Sleep 2) else (echo ¼
 goto MAIN_MENU
 
 :REMOVE_TASK
+echo.
 call :PrintCurrentSchedule
 if /i "!v_status!" equ "-1" call :Sleep 2& goto MAIN_MENU
+set "choice="
+set /p choice=È·ÈÏÉ¾³ý¼Æ»®ÈÎÎñ£¿(y/n)
+if not "%choice%"=="y" (echo ÒÑÈ¡Ïû& call :Sleep 1& goto MAIN_MENU)
 >nul schtasks /delete /tn FBox_HistoryExport /f
 if /i "%errorlevel%" equ "0" (echo ³É¹¦É¾³ý¼Æ»®ÈÎÎñ& call :Sleep 2) else (echo ¼Æ»®ÈÎÎñÉ¾³ýÊ§°Ü& pause)
 goto MAIN_MENU
@@ -253,8 +258,8 @@ REM 	set status=Î´°²×°
 REM )
 
 :PrintCurrentSchedule_1
-echo µ±Ç°¼Æ»®ÈÎÎñ×´Ì¬:
-echo ©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤
+echo  µ±Ç°¼Æ»®ÈÎÎñ×´Ì¬:
+echo  ------------------------------------------------
 if "!v_status!"=="-1" (
 	echo    Î´°²×°
 ) else (
@@ -265,7 +270,7 @@ rem	echo   ¼Æ»®:			!v_schedule!
 	echo    ¼Æ»®ÀàÐÍ:		!v_scheduleType!
 	echo    ÖØ¸´·½Ê½:		!v_repeatEvery!
 )
-echo ©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤©¤
+echo  ------------------------------------------------
 
 >nul 2>nul del "!tempFile!"
 
@@ -279,7 +284,8 @@ exit /b
 
 :Sleep seconds -- waits some seconds before returning
 ::             -- seconds [in]  - number of seconds to wait
-FOR /l %%a in (%~1,-1,1) do (ping -n 2 -w 1 127.0.0.1>NUL)
+timeout %1 > nul
+rem FOR /l %%a in (%~1,-1,1) do (ping -n 2 -w 1 127.0.0.1>NUL)
 EXIT /b
 
 :StrLen string len -- returns the length of a string

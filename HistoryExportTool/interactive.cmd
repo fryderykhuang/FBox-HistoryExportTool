@@ -211,7 +211,7 @@ echo historyexporttool.exe exporthdata --export-last-segment --segments-per-day 
 set /a v_mo=24/vi_nrSegments
 
 echo cd /d %%~dp0> install-task.cmd
-echo schtasks /create /tn FBox_HistoryExport /sc %v_sc% /mo %v_mo% /st 00:30 /tr "%%~dp0\run-task.cmd" /ru SYSTEM  /f>> install-task.cmd
+echo schtasks /create /tn FBox_HistoryExport /sc %v_sc% /mo %v_mo% /st 00:30 /tr "%%~dp0\run-task.cmd" /ru SYSTEM /rl HIGHEST /f>> install-task.cmd
 1>nul call install-task.cmd
 echo.
 if /i "%errorlevel%" equ "0" (echo 计划任务更新成功& call :Sleep 2) else (echo 计划任务更新失败& pause)

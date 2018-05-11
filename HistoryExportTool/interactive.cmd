@@ -190,7 +190,7 @@ call :PrintCurrentSchedule
 :INSTALL_TASK_INPUT_NR_SEGMENTS
 echo.
 set vi_nrSegments=-1
-set /p vi_nrSegments=请输入每天期望的导出次数（1,2,3,4,6,8,12,24)：
+set /p vi_nrSegments=请输入每天期望的导出次数(1,2,3,4,6,8,12,24)：
 set v_sc=hourly
 if /i "%vi_nrSegments%" equ "1" set v_sc=daily& set vi_nrSegments=24& goto :INSTALL_TASK_DO_INSTALL
 if /i "%vi_nrSegments%" equ "2" goto :INSTALL_TASK_DO_INSTALL
@@ -203,6 +203,11 @@ if /i "%vi_nrSegments%" equ "24" goto :INSTALL_TASK_DO_INSTALL
 goto :INSTALL_TASK_INPUT_NR_SEGMENTS
 
 :INSTALL_TASK_DO_INSTALL:
+echo.
+set "vi_runAsUser="
+set /p vi_runAsUser=请输入运行账户名(回车使用当前用户，使用非系统内置账户需要输入密码)：
+call :Trim vi_runAsUser %vi_runAsUser%
+if "%vi_runAsUser%"=="" set "vi_runAsUser=%USERNAME%"
 set "choice="
 set /p choice=确认更新计划任务？(y/n)
 if not "%choice%"=="y" (echo 已取消& call :Sleep 1& goto MAIN_MENU)
@@ -211,8 +216,8 @@ echo historyexporttool.exe exporthdata --export-last-segment --segments-per-day 
 set /a v_mo=24/vi_nrSegments
 
 echo cd /d %%~dp0> install-task.cmd
-echo schtasks /create /tn FBox_HistoryExport /sc %v_sc% /mo %v_mo% /st 00:30 /tr "%%~dp0\run-task.cmd" /ru SYSTEM /rl HIGHEST /f>> install-task.cmd
-1>nul call install-task.cmd
+echo schtasks /create /tn FBox_HistoryExport /sc %v_sc% /mo %v_mo% /st 00:30 /tr "%%~dp0\run-task.cmd" /ru "%vi_runAsUser%" /rp /rl HIGHEST /f>> install-task.cmd
+call install-task.cmd
 echo.
 if /i "%errorlevel%" equ "0" (echo 计划任务更新成功& call :Sleep 2) else (echo 计划任务更新失败& pause)
 goto MAIN_MENU

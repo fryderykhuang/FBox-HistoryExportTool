@@ -12,25 +12,14 @@ if not %errorlevel% equ 0 (
 	goto END
 )
 
+
 :INITIALIZE
 set "cfgFile=export.cfg"
 FOR /F "tokens=3" %%a IN ('reg query "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\Language" /v InstallLanguage ^| find "InstallLanguage"') DO set lang=%%a
 if "%lang%" == "0804" (
-	set "K_Status=模式:"
-	set "K_LastRunTime=上次运行时间:"
-	set "K_NextRunTime=下次运行时间:"
-	set "K_Schedule=计划:"
-	set "K_ScheduleType=计划类型:"
-	set "K_StartTime=开始时间:"
-	set "K_RepeatEvery=重复: 每:"
+	call :SetZhCNVars
 ) else (
-	set "K_Status=Status"
-	set "K_LastRunTime=Last Run Time:"
-	set "K_NextRunTime=Next Run Time:"
-	set "K_Schedule=Schedule:"
-	set "K_ScheduleType=Schedule Type:"
-	set "K_StartTime=Start Time:"
-	set "K_RepeatEvery=Repeat: Every:"
+	call :SetEnUSVars
 )
 
 call :ReadCfg
@@ -153,31 +142,34 @@ if /i "%choice%" equ "4" goto UPDATE_CFG_4
 if /i "%choice%" equ "5" goto UPDATE_CFG_5
 goto UPDATE_CFG
 
-:UPDATE_CFG_1:
+:UPDATE_CFG_1
 set /p cfgi_boxSnFileCsvr=请粘贴或输入文件路径，直接回车则使用当前值(%cfg_boxSnFileCsvr%):
-if not exist %cfgi_boxSnFileCsvr% echo 文件不存在。& goto UPDATE_CFG_1
-set cfg_boxSnFileCsvr=%cfgi_boxSnFileCsvr%
+call :Trim cfgi_boxSnFileCsvr %cfgi_boxSnFileCsvr%
+if "%cfgi_boxSnFileCsvr%"=="" goto :UPDATE_CFG_1_1
+if not exist "%cfgi_boxSnFileCsvr%" echo 文件不存在。& goto UPDATE_CFG_1
+set "cfg_boxSnFileCsvr=%cfgi_boxSnFileCsvr%"
 call :WriteCfg
+:UPDATE_CFG_1_1
 goto UPDATE_CFG
 goto END
-:UPDATE_CFG_2:
+:UPDATE_CFG_2
 echo 设置导出文件的文件名，支持替换变量:{CurrentTime} {BeginTime} {EndTime} {BoxSN} {ItemName}。替换变量自定义格式用法请参考：https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/composite-formatting
 set /p cfg_outputFileNamePattern=请输入新值，或回车使用当前值(%cfg_outputFileNamePattern%):
 call :WriteCfg
 goto UPDATE_CFG
 goto END
-:UPDATE_CFG_3:
+:UPDATE_CFG_3
 echo 设置导出目录，支持替换变量:{CurrentTime} {BeginTime} {EndTime} {BoxSN} {ItemName}。替换变量自定义格式用法请参考：https://docs.microsoft.com/zh-cn/dotnet/standard/base-types/composite-formatting
 set /p cfg_outputDir=请输入新值，或回车使用当前值(%cfg_outputDir%):
 call :WriteCfg
 goto UPDATE_CFG
 goto END
-:UPDATE_CFG_4:
+:UPDATE_CFG_4
 set /p cfg_timestampFormat=请输入新值，或回车使用当前值(%cfg_timestampFormat%):
 call :WriteCfg
 goto UPDATE_CFG
 goto END
-:UPDATE_CFG_5:
+:UPDATE_CFG_5
 set /p cfg_nullSubstitution=请输入新值，或回车使用当前值(%cfg_nullSubstitution%):
 call :WriteCfg
 goto UPDATE_CFG
@@ -237,16 +229,24 @@ goto END
 :PrintCurrentSchedule
 set v_status=-1
 set "tempFile=%temp%\%~nx0_%time::=.%.tmp"
-
-2>nul schtasks /query /tn FBox_HistoryExport /FO LIST /V > "!tempFile!"
-if /i "%errorlevel%" neq "0" goto PrintCurrentSchedule_1
-
-for /f "tokens=2*delims=:" %%a in ('find "%K_Status%" "%tempFile%"') do ( set v_status=%%a)
-for /f "tokens=2*delims=:" %%a in ('find "%K_LastRunTime%" "%tempFile%"') do ( set v_lastRunTime=%%a)
-for /f "tokens=2*delims=:" %%a in ('find "%K_NextRunTime%" "%tempFile%"') do ( set v_nextRunTime=%%a)
-for /f "tokens=2*delims=:" %%a in ('find "%K_Schedule%" "%tempFile%"') do ( set v_schedule=%%a)
-for /f "tokens=2*delims=:" %%a in ('find "%K_ScheduleType%" "%tempFile%"') do ( set v_scheduleType=%%a)
-for /f "tokens=3*delims=:" %%a in ('find "%K_RepeatEvery%" "%tempFile%"') do ( set v_repeatEvery=%%a)
+1>"%tempFile%" 2>&1 schtasks /query /tn FBox_HistoryExport /FO LIST /V
+set el=%errorlevel%
+>nul find "无法加载列资源" "%tempFile%"
+if /i "%errorlevel%" neq "0" goto PrintCurrentSchedule_2
+1>nul 2>&1 chcp 437
+call :SetEnUSVars
+2>nul schtasks /query /tn FBox_HistoryExport /FO LIST /V > "%tempFile%"
+set el=%errorlevel%
+1>nul 2>&1 chcp 936
+call :SetEnUSVars
+:PrintCurrentSchedule_2
+if /i "%el%" neq "0" goto PrintCurrentSchedule_1
+for /f "tokens=2*delims=:" %%a in ('type "%tempFile%" ^| find "%K_Status%"') do ( set v_status=%%a)
+for /f "tokens=2*delims=:" %%a in ('type "%tempFile%" ^| find "%K_LastRunTime%"') do ( set v_lastRunTime=%%a)
+for /f "tokens=2*delims=:" %%a in ('type "%tempFile%" ^| find "%K_NextRunTime%"') do ( set v_nextRunTime=%%a)
+for /f "tokens=2*delims=:" %%a in ('type "%tempFile%" ^| find "%K_Schedule%"') do ( set v_schedule=%%a)
+for /f "tokens=2*delims=:" %%a in ('type "%tempFile%" ^| find "%K_ScheduleType%"') do ( set v_scheduleType=%%a)
+for /f "tokens=3*delims=:" %%a in ('type "%tempFile%" ^| find "%K_RepeatEvery%"') do ( set v_repeatEvery=%%a)
 
 call :Trim v_status !v_status!
 call :Trim v_lastRunTime !v_lastRunTime!
@@ -277,7 +277,7 @@ rem	echo   计划:			!v_schedule!
 )
 echo  ------------------------------------------------
 
->nul 2>nul del "!tempFile!"
+>nul 2>nul del "%tempFile%"
 
 exit /b
 
@@ -309,6 +309,26 @@ EXIT /b
     IF "%~2" NEQ "" SET /a %~2=%len%
 )
 EXIT /b
+
+:SetZhCNVars
+	set "K_Status=模式:"
+	set "K_LastRunTime=上次运行时间:"
+	set "K_NextRunTime=下次运行时间:"
+	set "K_Schedule=计划:"
+	set "K_ScheduleType=计划类型:"
+	set "K_StartTime=开始时间:"
+	set "K_RepeatEvery=重复: 每:"
+exit /b
+
+:SetEnUSVars
+	set "K_Status=Status"
+	set "K_LastRunTime=Last Run Time:"
+	set "K_NextRunTime=Next Run Time:"
+	set "K_Schedule=Schedule:"
+	set "K_ScheduleType=Schedule Type:"
+	set "K_StartTime=Start Time:"
+	set "K_RepeatEvery=Repeat: Every:"
+exit /b
 
 :END
 color
